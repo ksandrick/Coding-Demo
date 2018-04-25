@@ -13,6 +13,7 @@
 		C4830F3A2090DBBB005FFE8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4830F392090DBBB005FFE8F /* Assets.xcassets */; };
 		C4830F3D2090DBBB005FFE8F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4830F3B2090DBBB005FFE8F /* LaunchScreen.storyboard */; };
 		C4830F482090DBBC005FFE8F /* TRANSFLO_Truck_StopsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F472090DBBC005FFE8F /* TRANSFLO_Truck_StopsUITests.swift */; };
+		C4830F5320910572005FFE8F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F5220910572005FFE8F /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,8 @@
 		C4830F432090DBBC005FFE8F /* TRANSFLO Truck StopsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TRANSFLO Truck StopsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4830F472090DBBC005FFE8F /* TRANSFLO_Truck_StopsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRANSFLO_Truck_StopsUITests.swift; sourceTree = "<group>"; };
 		C4830F492090DBBC005FFE8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C4830F5220910572005FFE8F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		C4830F5520912B2E005FFE8F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +65,7 @@
 				C4830F312090DBBB005FFE8F /* TRANSFLO Truck Stops */,
 				C4830F462090DBBC005FFE8F /* TRANSFLO Truck StopsUITests */,
 				C4830F302090DBBB005FFE8F /* Products */,
+				C4830F5420912B2E005FFE8F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,6 +83,7 @@
 			children = (
 				C4830F322090DBBB005FFE8F /* AppDelegate.swift */,
 				C4830F342090DBBB005FFE8F /* ViewController.swift */,
+				C4830F5220910572005FFE8F /* Constants.swift */,
 				C4830F362090DBBB005FFE8F /* Main.storyboard */,
 				C4830F392090DBBB005FFE8F /* Assets.xcassets */,
 				C4830F3B2090DBBB005FFE8F /* LaunchScreen.storyboard */,
@@ -94,6 +99,14 @@
 				C4830F492090DBBC005FFE8F /* Info.plist */,
 			);
 			path = "TRANSFLO Truck StopsUITests";
+			sourceTree = "<group>";
+		};
+		C4830F5420912B2E005FFE8F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C4830F5520912B2E005FFE8F /* CoreLocation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,6 +214,7 @@
 			files = (
 				C4830F352090DBBB005FFE8F /* ViewController.swift in Sources */,
 				C4830F332090DBBB005FFE8F /* AppDelegate.swift in Sources */,
+				C4830F5320910572005FFE8F /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
