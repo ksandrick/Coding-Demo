@@ -15,7 +15,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        retrieveTruckStops()
+        let latitude: CLLocationDegrees = 36.665115
+        let longitude: CLLocationDegrees = -121.636536
+        let searchLocation = CLLocation.init(latitude: latitude, longitude: longitude)
+        retrieveTruckStops(location: searchLocation)
     }
 
     override func didReceiveMemoryWarning() {
