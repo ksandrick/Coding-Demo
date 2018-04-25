@@ -14,6 +14,7 @@
 		C4830F3D2090DBBB005FFE8F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4830F3B2090DBBB005FFE8F /* LaunchScreen.storyboard */; };
 		C4830F482090DBBC005FFE8F /* TRANSFLO_Truck_StopsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F472090DBBC005FFE8F /* TRANSFLO_Truck_StopsUITests.swift */; };
 		C4830F5320910572005FFE8F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F5220910572005FFE8F /* Constants.swift */; };
+		C4830F572091319E005FFE8F /* TruckStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F562091319E005FFE8F /* TruckStop.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,7 @@
 		C4830F492090DBBC005FFE8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4830F5220910572005FFE8F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C4830F5520912B2E005FFE8F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C4830F562091319E005FFE8F /* TruckStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckStop.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				C4830F322090DBBB005FFE8F /* AppDelegate.swift */,
 				C4830F342090DBBB005FFE8F /* ViewController.swift */,
 				C4830F5220910572005FFE8F /* Constants.swift */,
+				C4830F562091319E005FFE8F /* TruckStop.swift */,
 				C4830F362090DBBB005FFE8F /* Main.storyboard */,
 				C4830F392090DBBB005FFE8F /* Assets.xcassets */,
 				C4830F3B2090DBBB005FFE8F /* LaunchScreen.storyboard */,
@@ -213,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4830F352090DBBB005FFE8F /* ViewController.swift in Sources */,
+				C4830F572091319E005FFE8F /* TruckStop.swift in Sources */,
 				C4830F332090DBBB005FFE8F /* AppDelegate.swift in Sources */,
 				C4830F5320910572005FFE8F /* Constants.swift in Sources */,
 			);
