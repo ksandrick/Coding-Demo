@@ -8,8 +8,9 @@
 
 import Foundation
 import CoreLocation
+import MapKit
 
-struct TruckStop {
+class TruckStop: NSObject, MKAnnotation {
     let name: String
     let city: String
     let state: String
@@ -18,10 +19,17 @@ struct TruckStop {
     let rawLine1: String
     let rawLine2: String
     let rawLine3: String
-    let location: (latitude: Double, longitude: Double)
-}
+    let latitude: Double
+    let longitude: Double
+    let coordinate: CLLocationCoordinate2D
+    
+    var title: String? {
+        return name
+    }
+    var subtitle: String? {
+        return ""
+    }
 
-extension TruckStop {
     init?(json: [String: Any]) {
         // Handle required fields
         guard let name = json["name"] as? String,
@@ -31,7 +39,9 @@ extension TruckStop {
             return nil
         }
         self.name = name
-        self.location = (Double(latitude)!, Double(longitude)!)
+        self.latitude = Double(latitude)!
+        self.longitude = Double(longitude)!
+        self.coordinate = CLLocationCoordinate2DMake(self.latitude, self.longitude)
         
         // Extract all others
         self.city = json["city"] as? String ?? ""
@@ -75,7 +85,7 @@ extension TruckStop {
                     for result in returnedTruckStops {
                         if let truckStop = TruckStop(json: result as! Dictionary<String,Any>) {
                             truckStops.append(truckStop)
-                            print(truckStop)
+//                            print(truckStop)
                         }
                     }
                     completion(truckStops)

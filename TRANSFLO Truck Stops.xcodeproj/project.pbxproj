@@ -41,6 +41,7 @@
 		C4830F5220910572005FFE8F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C4830F5520912B2E005FFE8F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C4830F562091319E005FFE8F /* TruckStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckStop.swift; sourceTree = "<group>"; };
+		C4830F5820916600005FFE8F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +108,7 @@
 		C4830F5420912B2E005FFE8F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C4830F5820916600005FFE8F /* MapKit.framework */,
 				C4830F5520912B2E005FFE8F /* CoreLocation.framework */,
 			);
 			name = Frameworks;
