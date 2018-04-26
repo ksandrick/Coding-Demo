@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct TruckStop {
     let name: String
@@ -41,4 +42,47 @@ extension TruckStop {
         self.rawLine2 = json["rawLine2"] as? String ?? ""
         self.rawLine3 = json["rawLine3"] as? String ?? ""
     }
+    
+    static func retrieveTruckStops(radius: Double = 100.0,
+                            location: CLLocation,
+                            completion: @escaping ([TruckStop]) -> Void) {
+        let urlString = Services.apiURL + String(format:"%f", radius)
+        let url = URL(string: urlString)!
+        var request = URLRequest(url: url)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Basic \(Services.apiKey)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+        let json: [String: Any] = ["lat": location.coordinate.latitude,
+                                   "lng": location.coordinate.longitude]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        request.httpBody = jsonData
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                // check for general errors
+                print("error=\(String(describing: error))")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(String(describing: response))")
+            }
+            
+            var truckStops: [TruckStop] = []
+            if let jsonResults = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]{
+                if let returnedTruckStops = jsonResults!["truckStops"] as? [Any] {
+                    for result in returnedTruckStops {
+                        if let truckStop = TruckStop(json: result as! Dictionary<String,Any>) {
+                            truckStops.append(truckStop)
+                            print(truckStop)
+                        }
+                    }
+                    completion(truckStops)
+                }
+            }
+        }
+        task.resume()
+    }
+ 
 }

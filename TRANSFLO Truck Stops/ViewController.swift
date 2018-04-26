@@ -18,50 +18,17 @@ class ViewController: UIViewController {
         let latitude: CLLocationDegrees = 36.665115
         let longitude: CLLocationDegrees = -121.636536
         let searchLocation = CLLocation.init(latitude: latitude, longitude: longitude)
-        retrieveTruckStops(location: searchLocation)
+        TruckStop.retrieveTruckStops(location: searchLocation) { truckStops in
+            for truckStop in truckStops {
+                print(truckStop.name)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    fileprivate func retrieveTruckStops(radius: Double = 100.0,
-                                        location: CLLocation) {
-        let urlString = Services.apiURL + String(format:"%f", radius)
-        let url = URL(string: urlString)!
-        var request = URLRequest(url: url)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Basic \(Services.apiKey)", forHTTPHeaderField: "Authorization")
-        request.httpMethod = "POST"
-        let json: [String: Any] = ["lat": location.coordinate.latitude,
-                                   "lng": location.coordinate.longitude]
-        let jsonData = try? JSONSerialization.data(withJSONObject: json)
-        request.httpBody = jsonData
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                // check for general errors
-                print("error=\(String(describing: error))")
-                return
-            }
-            
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(String(describing: response))")
-            }
-            
-            do {
-                let results = try JSONSerialization.jsonObject(with: data, options: [])
-                print("Result -> \(describing: results)")
-                
-            } catch {
-//                print("Error -> \(describing: error)")
-            }
-        }
-        task.resume()
-    }
-
 
 }
 
