@@ -56,7 +56,8 @@ class TruckStop: NSObject, MKAnnotation {
     static func retrieveTruckStops(radius: Double = 100.0,
                             location: CLLocation,
                             completion: @escaping ([TruckStop]) -> Void) {
-        let urlString = Services.apiURL + String(format:"%f", radius)
+        let urlString = Services.apiURL + String(format:"%.2f", radius)
+        print(urlString)
         let url = URL(string: urlString)!
         var request = URLRequest(url: url)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -85,7 +86,6 @@ class TruckStop: NSObject, MKAnnotation {
                     for result in returnedTruckStops {
                         if let truckStop = TruckStop(json: result as! Dictionary<String,Any>) {
                             truckStops.append(truckStop)
-//                            print(truckStop)
                         }
                     }
                     completion(truckStops)
