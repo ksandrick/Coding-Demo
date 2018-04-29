@@ -14,10 +14,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var truckStops: [TruckStop] = [] {
         didSet {
-            for truckStop in truckStops {
-                print(truckStop.name)
-                self.mapView.addAnnotations(truckStops)
-            }
+            let annotationsToRemove = mapView.annotations.filter { $0 !== mapView.userLocation }
+            mapView.removeAnnotations(annotationsToRemove)
+            self.mapView.addAnnotations(truckStops)
         }
     }
     
@@ -28,7 +27,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         mapView.delegate = self
         determineLocation()
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,13 +48,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func centerMapOnLocation(location: CLLocation) {
-        let radiusInMiles = metersInAMile * defaultRadius
+        let radiusInMiles = Utils.milesIn(meters: Distances.defaultRadius)
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
                                                                   radiusInMiles, radiusInMiles)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let currentMapLocation = mapView.centerCoordinate//region.center
+        let location:CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
+        TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { truckStops in
+            self.truckStops = truckStops
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print("User location did change")
         manager.stopUpdatingLocation()
         let userLocation:CLLocation = locations[0] as CLLocation
         print("user latitude = \(userLocation.coordinate.latitude)")
