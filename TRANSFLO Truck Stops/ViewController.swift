@@ -24,12 +24,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var locationManager:CLLocationManager!
     @IBOutlet weak var mapView: MKMapView!
     
-    let defaultRadius: CLLocationDistance = 100.0
-    let metersInAMile: Double = 1609.344
-    let milesInAMeter: Double = 0.000621371192
-//    let regionRadius: CLLocationDistance = 100
-//    let initialLocation = CLLocation(latitude: 36.665115, longitude: -121.636536)
-
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
