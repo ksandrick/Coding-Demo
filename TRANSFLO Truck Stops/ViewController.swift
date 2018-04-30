@@ -48,9 +48,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func centerMapOnLocation(location: CLLocation) {
-        let radiusInMiles = Utils.milesIn(meters: Distances.defaultRadius)
+        let radiusInMeters = Utils.metersIn(miles: Distances.defaultRadius)
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
-                                                                  radiusInMiles, radiusInMiles)
+                                                                  radiusInMeters, radiusInMeters)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
