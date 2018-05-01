@@ -14,8 +14,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var truckStops: [TruckStop] = [] {
         didSet {
-            let annotationsToRemove = mapView.annotations.filter { $0 !== mapView.userLocation }
-            mapView.removeAnnotations(annotationsToRemove)
             self.mapView.addAnnotations(truckStops)
         }
     }
@@ -55,10 +53,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        let currentMapLocation = mapView.centerCoordinate//region.center
+        let currentMapLocation = mapView.centerCoordinate
         let location:CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
-        TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { truckStops in
-            self.truckStops = truckStops
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if let truckStop = view.annotation as? TruckStop {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier :"TruckStopViewController") as! TruckStopViewController
+            viewController.truckStop = truckStop
+            viewController.modalPresentationStyle = .overCurrentContext
+            self.present(viewController, animated: true)
         }
     }
     
