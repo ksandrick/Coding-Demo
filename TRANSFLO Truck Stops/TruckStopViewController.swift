@@ -12,6 +12,7 @@ class TruckStopViewController: UIViewController {
     
     public var truckStop: TruckStop?
     
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var nameView: UIStackView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var distanceView: UIStackView!
@@ -24,6 +25,10 @@ class TruckStopViewController: UIViewController {
     @IBOutlet weak var address3Label: UILabel!
     @IBOutlet weak var phoneView: UIStackView!
     @IBOutlet weak var phoneLabel: UILabel!
+    
+    @IBAction func closeTruckStop(sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
