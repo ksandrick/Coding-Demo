@@ -34,6 +34,9 @@
                                     <segment title="Map"/>
                                     <segment title="Satellite"/>
                                 </segments>
+                                <connections>
+                                    <action selector="mapTypeChangedWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="OpO-ab-caW"/>
+                                </connections>
                             </segmentedControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w00-PE-OeN">
                                 <rect key="frame" x="16" y="46" width="71" height="30"/>
