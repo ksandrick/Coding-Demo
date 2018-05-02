@@ -88,9 +88,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let truckStop = view.annotation as? TruckStop {
-            performSegue(withIdentifier: "TruckStopSegue", sender: view)
-        }
+        performSegue(withIdentifier: "TruckStopSegue", sender: view)
+    }
+    
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        let userAnnotationView = mapView.view(for: mapView.userLocation)
+        userAnnotationView?.isEnabled = false
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
