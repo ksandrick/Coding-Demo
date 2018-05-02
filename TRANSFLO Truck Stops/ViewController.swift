@@ -12,14 +12,15 @@ import MapKit
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
+    var locationManager:CLLocationManager!
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapTypeControl: UISegmentedControl!
+    
     var truckStops: [TruckStop] = [] {
         didSet {
             self.mapView.addAnnotations(truckStops)
         }
     }
-    
-    var locationManager:CLLocationManager!
-    @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +43,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             if CLLocationManager.locationServicesEnabled() {
                 locationManager.startUpdatingLocation()
             }
+        }
+    }
+    
+    @IBAction func mapTypeChanged(sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            mapView.mapType = .standard
+        case 1:
+            mapView.mapType = .satellite
+        default:
+            mapView.mapType = .standard
         }
     }
     
