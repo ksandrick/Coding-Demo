@@ -53,6 +53,12 @@ class TruckStop: NSObject, MKAnnotation {
         self.rawLine3 = json["rawLine3"] as? String ?? ""
     }
     
+    public func distance(location : CLLocation?) -> CLLocationDistance {
+        guard let location = location else { return 0 }
+        let truckStopLocation = CLLocation(latitude: self.latitude, longitude: self.longitude)
+        return truckStopLocation.distance(from: location)
+    }
+    
     static func retrieveTruckStops(radius: Double = 100.0,
                             location: CLLocation,
                             completion: @escaping ([TruckStop]) -> Void) {

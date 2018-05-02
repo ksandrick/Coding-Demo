@@ -71,6 +71,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         let truckStop = annotationView?.annotation as? TruckStop
         if let modalViewController = segue.destination as? TruckStopViewController {
             modalViewController.truckStop = truckStop
+            modalViewController.userLocation = mapView.userLocation.location
         }
     }
     

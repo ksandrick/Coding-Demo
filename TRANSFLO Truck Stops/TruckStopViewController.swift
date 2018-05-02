@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class TruckStopViewController: UIViewController {
     
@@ -26,9 +27,7 @@ class TruckStopViewController: UIViewController {
     @IBOutlet weak var phoneView: UIStackView!
     @IBOutlet weak var phoneLabel: UILabel!
     
-    @IBAction func closeTruckStop(sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
-    }
+    public var userLocation : CLLocation?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,8 +40,12 @@ class TruckStopViewController: UIViewController {
         }else{
             nameView.isHidden = true
         }
-        let distance = "250 miles from current location"
+        
+        let meters = truckStop?.distance(location: userLocation) ?? 0
+        let miles = Distances.milesInAMeter * meters
+        let distance = String(format:"%.1f miles from current location",miles)
         distanceLabel.text = distance
+        
         address1Label.text = truckStop?.rawLine1
         if let city = truckStop?.city, let state = truckStop?.state, let zip = truckStop?.zip {
             address2Label.text = "\(city), \(state) \(zip)"
