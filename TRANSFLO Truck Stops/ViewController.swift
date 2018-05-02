@@ -55,15 +55,28 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let currentMapLocation = mapView.centerCoordinate
         let location:CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
+        TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { truckStops in
+            self.truckStops = truckStops
+        }
+    }
+    
+    @IBAction func unwindToMainViewController(sender: UIStoryboardSegue) {
+        if let currentTruckStop = (sender.source as? TruckStopViewController)?.truckStop {
+            mapView.deselectAnnotation(currentTruckStop, animated: false)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let annotationView = sender as? MKAnnotationView
+        let truckStop = annotationView?.annotation as? TruckStop
+        if let modalViewController = segue.destination as? TruckStopViewController {
+            modalViewController.truckStop = truckStop
+        }
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let truckStop = view.annotation as? TruckStop {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let viewController = storyboard.instantiateViewController(withIdentifier :"TruckStopViewController") as! TruckStopViewController
-            viewController.truckStop = truckStop
-            viewController.modalPresentationStyle = .overCurrentContext
-            self.present(viewController, animated: true)
+            performSegue(withIdentifier: "TruckStopSegue", sender: view)
         }
     }
     
