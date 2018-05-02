@@ -102,19 +102,18 @@ extension ViewController: MKMapViewDelegate {
         
         guard let annotation = annotation as? TruckStop else { return nil }
         let identifier = "truckStopMarker"
-        var view: MKMarkerAnnotationView
-        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
-            as? MKMarkerAnnotationView {
+        var pinView: MKMarkerAnnotationView
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as?  MKMarkerAnnotationView {
             dequeuedView.annotation = annotation
-            view = dequeuedView
+            pinView = dequeuedView
         } else {
-            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            view.canShowCallout = true
-            view.calloutOffset = CGPoint(x: -5, y: 5)
-            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-            //view.image = UIImage(named: "truckPin")
+            pinView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)//MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            pinView.canShowCallout = false
+            pinView.markerTintColor = UIColor.orange
+            pinView.glyphText = "T"
         }
-        return view
+        return pinView
+
     }
     
 }
