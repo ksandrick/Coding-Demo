@@ -159,7 +159,20 @@ extension ViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        recolorSelectedPin(view: view, toColor: UIColor.green)
         performSegue(withIdentifier: "TruckStopSegue", sender: view)
+    }
+    
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        recolorSelectedPin(view: view, toColor: UIColor.orange)
+    }
+    
+    func recolorSelectedPin(view: MKAnnotationView, toColor: UIColor) {
+        if let curAnnotation = view.annotation as? TruckStop {
+            if let markerView = mapView.view(for: curAnnotation) as? MKMarkerAnnotationView {
+                markerView.markerTintColor = toColor
+            }
+        }
     }
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
