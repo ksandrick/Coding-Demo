@@ -42,11 +42,17 @@
                                 <rect key="frame" x="16" y="46" width="71" height="30"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
                                 <state key="normal" title="Re-Center"/>
+                                <connections>
+                                    <action selector="resetMap" destination="BYZ-38-t0r" eventType="touchUpInside" id="YWH-Ea-EBm"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WNe-fg-mkA">
                                 <rect key="frame" x="143" y="611" width="89" height="30"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
                                 <state key="normal" title="Tracking: Off"/>
+                                <connections>
+                                    <action selector="toggleTracking:" destination="BYZ-38-t0r" eventType="touchUpInside" id="urp-vo-Oys"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pQ1-ix-rDx">
                                 <rect key="frame" x="311" y="46" width="48" height="30"/>

@@ -25,7 +25,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        determineLocation()
+        determineLocationStatus()
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,16 +33,48 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func determineLocation() {
+    func determineLocationStatus() {
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+                case .notDetermined:
+                    //Request status
+                    print("not determined")
+                case .denied:
+                    //Show alert sending them to settings
+                    showSettingsAlert(title: "", message: "")
+                case .restricted:
+                    //Unauthorized
+                    print("restricted")
+                case .authorizedAlways, .authorizedWhenInUse:
+                    startLocationManager()
+            }
+        } else {
+            print("Location services are not enabled")
+        }
+    }
+    
+    func showSettingsAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: "Location Services Required", message: "Open user settings", preferredStyle: UIAlertControllerStyle.alert)
+        
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment:"" ), style: .cancel, handler: nil)
+        
+        let okAction = UIAlertAction(title: "OK", style: .default) {
+            (result : UIAlertAction) -> Void in
+            UIApplication.shared.open(NSURL(string:UIApplicationOpenSettingsURLString)! as URL, options: [:], completionHandler: nil)
+        }
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func startLocationManager() {
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.requestWhenInUseAuthorization()
-            
-            if CLLocationManager.locationServicesEnabled() {
-                locationManager.startUpdatingLocation()
-            }
+            locationManager.startUpdatingLocation()
         }
     }
     
