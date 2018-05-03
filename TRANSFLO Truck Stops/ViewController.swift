@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController {
     
     var isTracking:Bool = false
     var locationManager:CLLocationManager!
@@ -34,6 +34,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func unwindToMainViewController(sender: UIStoryboardSegue) {
+        if let currentTruckStop = (sender.source as? TruckStopViewController)?.truckStop {
+            mapView.deselectAnnotation(currentTruckStop, animated: false)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let annotationView = sender as? MKAnnotationView
+        let truckStop = annotationView?.annotation as? TruckStop
+        if let modalViewController = segue.destination as? TruckStopViewController {
+            modalViewController.truckStop = truckStop
+            modalViewController.userLocation = mapView.userLocation.location
+        }
+    }
+    
+}
+
+extension ViewController: CLLocationManagerDelegate {
+
     func determineLocationStatus() {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
@@ -79,6 +98,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print("User location did change")
+        manager.stopUpdatingLocation()
+        let userLocation:CLLocation = locations[0] as CLLocation
+        print("user latitude = \(userLocation.coordinate.latitude)")
+        print("user longitude = \(userLocation.coordinate.longitude)")
+        
+        centerMapOnLocation(location: userLocation)
+        
+        if !isTracking { locationManager.stopUpdatingLocation() }
+        
+        TruckStop.retrieveTruckStops(location: userLocation) { truckStops in
+            self.truckStops = truckStops
+        }
+    }
+ 
+}
+
+extension ViewController: MKMapViewDelegate {
+    
     @IBAction func mapTypeChanged(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
@@ -119,21 +158,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    @IBAction func unwindToMainViewController(sender: UIStoryboardSegue) {
-        if let currentTruckStop = (sender.source as? TruckStopViewController)?.truckStop {
-            mapView.deselectAnnotation(currentTruckStop, animated: false)
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let annotationView = sender as? MKAnnotationView
-        let truckStop = annotationView?.annotation as? TruckStop
-        if let modalViewController = segue.destination as? TruckStopViewController {
-            modalViewController.truckStop = truckStop
-            modalViewController.userLocation = mapView.userLocation.location
-        }
-    }
-    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         performSegue(withIdentifier: "TruckStopSegue", sender: view)
     }
@@ -143,28 +167,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         userAnnotationView?.isEnabled = false
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("User location did change")
-        manager.stopUpdatingLocation()
-        let userLocation:CLLocation = locations[0] as CLLocation
-        print("user latitude = \(userLocation.coordinate.latitude)")
-        print("user longitude = \(userLocation.coordinate.longitude)")
-        
-        centerMapOnLocation(location: userLocation)
-        
-        if isTracking {
-            
-        }else{
-            locationManager.stopUpdatingLocation()
-        }
-        
-        TruckStop.retrieveTruckStops(location: userLocation) { truckStops in
-            self.truckStops = truckStops
-        }
-    }
-}
-
-extension ViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation {
             return nil
@@ -183,7 +185,5 @@ extension ViewController: MKMapViewDelegate {
             pinView.glyphText = NSLocalizedString("T", comment:"" )
         }
         return pinView
-
     }
-    
 }

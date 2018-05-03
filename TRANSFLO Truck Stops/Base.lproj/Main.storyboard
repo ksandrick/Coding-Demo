@@ -77,6 +77,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="mapTypeControl" destination="8MW-N0-NJe" id="XsV-E0-O5Q"/>
                         <outlet property="mapView" destination="rQ1-z5-61H" id="Alk-gd-ZBr"/>
                         <segue destination="X9l-6h-wn6" kind="presentation" identifier="TruckStopSegue" modalPresentationStyle="overCurrentContext" id="izf-Xr-HyA"/>
                     </connections>
@@ -192,7 +193,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="jyr-Mn-HKi" secondAttribute="trailing" constant="16" id="aqx-hl-Yub"/>
-                            <constraint firstItem="sxi-g1-dcl" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jyr-Mn-HKi" secondAttribute="bottom" constant="321" id="r4w-ww-ueZ"/>
+                            <constraint firstItem="sxi-g1-dcl" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jyr-Mn-HKi" secondAttribute="bottom" constant="8" symbolic="YES" id="r4w-ww-ueZ"/>
                             <constraint firstItem="jyr-Mn-HKi" firstAttribute="leading" secondItem="3MR-tk-AfQ" secondAttribute="leading" constant="16" id="ujk-fa-5Vd"/>
                             <constraint firstItem="jyr-Mn-HKi" firstAttribute="top" secondItem="lyO-RM-pJe" secondAttribute="bottom" constant="16" id="ukQ-hb-VQe"/>
                         </constraints>
