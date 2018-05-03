@@ -12,6 +12,7 @@ import MapKit
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
+    var isTracking:Bool = false
     var locationManager:CLLocationManager!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapTypeControl: UISegmentedControl!
@@ -89,8 +90,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    func centerMapOnLocation(location: CLLocation) {
-        let radiusInMeters = Utils.metersIn(miles: Distances.defaultRadius)
+    @IBAction func toggleTracking(_ sender:UIButton) {
+        isTracking = !isTracking
+        let buttonTitle = isTracking ? "Tracking: On" : "Tracking: Off"
+        sender.setTitle(buttonTitle, for: .normal)
+        if isTracking { locationManager.startUpdatingLocation() }
+    }
+    
+    @IBAction func resetMap() {
+        if let currentUserLocation = mapView.userLocation.location {
+            centerMapOnLocation(location: currentUserLocation)
+        }
+    }
+    
+    func centerMapOnLocation(location: CLLocation,
+                             radius:Double = Distances.defaultRadius) {
+        let radiusInMeters = Utils.metersIn(miles: radius)
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
                                                                   radiusInMeters, radiusInMeters)
         mapView.setRegion(coordinateRegion, animated: true)
@@ -136,6 +151,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         print("user longitude = \(userLocation.coordinate.longitude)")
         
         centerMapOnLocation(location: userLocation)
+        
+        if isTracking {
+            
+        }else{
+            locationManager.stopUpdatingLocation()
+        }
+        
         TruckStop.retrieveTruckStops(location: userLocation) { truckStops in
             self.truckStops = truckStops
         }
