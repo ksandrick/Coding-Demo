@@ -26,6 +26,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         determineLocationStatus()
     }
 
@@ -57,14 +63,10 @@ extension ViewController: CLLocationManagerDelegate {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
                 case .notDetermined:
-                    //Request status
-                    print("not determined")
-                case .denied:
+                    locationManager.requestWhenInUseAuthorization()
+                case .denied, .restricted:
                     //Show alert sending them to settings
-                    showSettingsAlert(title: "", message: "")
-                case .restricted:
-                    //Unauthorized
-                    print("restricted")
+                    showSettingsAlert()
                 case .authorizedAlways, .authorizedWhenInUse:
                     startLocationManager()
             }
@@ -72,28 +74,26 @@ extension ViewController: CLLocationManagerDelegate {
             print("Location services are not enabled")
         }
     }
-    
-    func showSettingsAlert(title: String, message: String) {
+ 
+    func showSettingsAlert() {
         let alertController = UIAlertController(title: NSLocalizedString("Location Services Required", comment:"" ), message: NSLocalizedString("Open user settings", comment:"" ), preferredStyle: UIAlertControllerStyle.alert)
-        
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment:"" ), style: .cancel, handler: nil)
-        
-        let okAction = UIAlertAction(title: "OK", style: .default) {
+
+        let okAction = UIAlertAction(title: "Settings", style: .default) {
             (result : UIAlertAction) -> Void in
             UIApplication.shared.open(NSURL(string:UIApplicationOpenSettingsURLString)! as URL, options: [:], completionHandler: nil)
         }
+
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment:"" ), style: .cancel, handler: nil)
         
-        alertController.addAction(cancelAction)
         alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        
         self.present(alertController, animated: true, completion: nil)
     }
-    
+
     func startLocationManager() {
         if CLLocationManager.locationServicesEnabled() {
-            locationManager = CLLocationManager()
-            locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.requestWhenInUseAuthorization()
             locationManager.startUpdatingLocation()
         }
     }
