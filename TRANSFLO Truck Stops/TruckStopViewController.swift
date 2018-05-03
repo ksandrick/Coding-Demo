@@ -43,25 +43,32 @@ class TruckStopViewController: UIViewController {
         
         let meters = truckStop?.distance(location: userLocation) ?? 0
         let miles = Distances.milesInAMeter * meters
-        let distance = String(format:"%.1f miles from current location",miles)
+        let distanceStringFormat = NSLocalizedString("%.1f miles from current location", comment:"" )
+        let distance = String(format:distanceStringFormat,miles)
         distanceLabel.text = distance
         
-        address1Label.text = truckStop?.rawLine1
+        if let address = truckStop?.rawLine1 {
+            address1Label.text = address
+        }else{
+            address1View.isHidden = true
+        }
+        
         if let city = truckStop?.city, let state = truckStop?.state, let zip = truckStop?.zip {
             address2Label.text = "\(city), \(state) \(zip)"
         }else{
             address2View.isHidden = true
         }
+        
         if let country = truckStop?.country {
             address3Label.text = country
         }else{
             address3View.isHidden = true
         }
+        
         if let phone = truckStop?.rawLine3 {
             phoneLabel.text = phone
+        }else{
+            phoneView.isHidden = true
         }
     }
-
-
-    
 }

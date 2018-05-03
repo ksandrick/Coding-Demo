@@ -55,7 +55,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func showSettingsAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: "Location Services Required", message: "Open user settings", preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: NSLocalizedString("Location Services Required", comment:"" ), message: NSLocalizedString("Open user settings", comment:"" ), preferredStyle: UIAlertControllerStyle.alert)
         
         let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment:"" ), style: .cancel, handler: nil)
         
@@ -92,7 +92,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func toggleTracking(_ sender:UIButton) {
         isTracking = !isTracking
-        let buttonTitle = isTracking ? "Tracking: On" : "Tracking: Off"
+        let buttonTitle = isTracking ? NSLocalizedString("Tracking: On", comment:"" ) : NSLocalizedString("Tracking: Off", comment:"" )
         sender.setTitle(buttonTitle, for: .normal)
         if isTracking { locationManager.startUpdatingLocation() }
     }
@@ -180,7 +180,7 @@ extension ViewController: MKMapViewDelegate {
             pinView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)//MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             pinView.canShowCallout = false
             pinView.markerTintColor = UIColor.orange
-            pinView.glyphText = "T"
+            pinView.glyphText = NSLocalizedString("T", comment:"" )
         }
         return pinView
 
