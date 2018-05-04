@@ -1,5 +1,5 @@
 //
-//  FloMapView.swift
+//  MapView+Radius.swift
 //  TRANSFLO Truck Stops
 //
 //  Created by Kristopher Sandrick on 4/29/18.
