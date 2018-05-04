@@ -74,6 +74,17 @@ extension MapViewController: CLLocationManagerDelegate {
             print("Location services are not enabled")
         }
     }
+
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .notDetermined:
+            manager.requestWhenInUseAuthorization()
+        case .denied, .restricted:
+            showSettingsAlert()
+        case .authorizedAlways, .authorizedWhenInUse:
+            startLocationManager()
+        }
+    }
  
     func showSettingsAlert() {
         let alertController = UIAlertController(title: NSLocalizedString("Location Services Required", comment:"" ), message: NSLocalizedString("Open user settings", comment:"" ), preferredStyle: UIAlertControllerStyle.alert)
