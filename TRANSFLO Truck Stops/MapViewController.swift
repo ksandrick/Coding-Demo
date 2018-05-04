@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MapViewController.swift
 //  TRANSFLO Truck Stops
 //
 //  Created by Kristopher Sandrick on 4/25/18.
@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class ViewController: UIViewController {
+class MapViewController: UIViewController {
     
     var isTracking:Bool = false
     var locationManager:CLLocationManager!
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
     
 }
 
-extension ViewController: CLLocationManagerDelegate {
+extension MapViewController: CLLocationManagerDelegate {
 
     func determineLocationStatus() {
         if CLLocationManager.locationServicesEnabled() {
@@ -116,7 +116,7 @@ extension ViewController: CLLocationManagerDelegate {
  
 }
 
-extension ViewController: MKMapViewDelegate {
+extension MapViewController: MKMapViewDelegate {
     
     @IBAction func mapTypeChanged(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
