@@ -15,7 +15,6 @@
 		C4830F482090DBBC005FFE8F /* TRANSFLO_Truck_StopsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F472090DBBC005FFE8F /* TRANSFLO_Truck_StopsUITests.swift */; };
 		C4830F5320910572005FFE8F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F5220910572005FFE8F /* Constants.swift */; };
 		C4830F572091319E005FFE8F /* TruckStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F562091319E005FFE8F /* TruckStop.swift */; };
-		C4830F5A20963EE9005FFE8F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F5920963EE6005FFE8F /* Utils.swift */; };
 		C4830F6020964B5F005FFE8F /* MapView+Radius.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4830F5F20964B5F005FFE8F /* MapView+Radius.swift */; };
 		C48EE42720978C27004B8C31 /* TruckStopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48EE42620978C27004B8C31 /* TruckStopViewController.swift */; };
 /* End PBXBuildFile section */
@@ -45,7 +44,6 @@
 		C4830F5520912B2E005FFE8F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C4830F562091319E005FFE8F /* TruckStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckStop.swift; sourceTree = "<group>"; };
 		C4830F5820916600005FFE8F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		C4830F5920963EE6005FFE8F /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		C4830F5F20964B5F005FFE8F /* MapView+Radius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView+Radius.swift"; sourceTree = "<group>"; };
 		C48EE42620978C27004B8C31 /* TruckStopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckStopViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,7 +93,6 @@
 				C48EE42620978C27004B8C31 /* TruckStopViewController.swift */,
 				C4830F5F20964B5F005FFE8F /* MapView+Radius.swift */,
 				C4830F5220910572005FFE8F /* Constants.swift */,
-				C4830F5920963EE6005FFE8F /* Utils.swift */,
 				C4830F562091319E005FFE8F /* TruckStop.swift */,
 				C4830F362090DBBB005FFE8F /* Main.storyboard */,
 				C4830F3B2090DBBB005FFE8F /* LaunchScreen.storyboard */,
@@ -226,7 +223,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4830F5A20963EE9005FFE8F /* Utils.swift in Sources */,
 				C4830F6020964B5F005FFE8F /* MapView+Radius.swift in Sources */,
 				C48EE42720978C27004B8C31 /* TruckStopViewController.swift in Sources */,
 				C4830F352090DBBB005FFE8F /* MapViewController.swift in Sources */,

@@ -18,3 +18,13 @@ struct Distances {
     static let milesInAMeter: Double = 0.000621371192
     static let defaultRadius: Double = 100.0
 }
+
+extension Double {
+    func toMeters() -> Double {
+        return self * Distances.metersInAMile
+    }
+    
+    func toMiles() -> Double {
+        return self * Distances.milesInAMeter
+    }
+}
