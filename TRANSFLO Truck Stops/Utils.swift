@@ -8,14 +8,12 @@
 
 import Foundation
 
-class Utils {
-    
-    class func metersIn(miles:Double) -> Double {
-        return miles * Distances.metersInAMile
+extension Double {
+    func toMeters() -> Double {
+        return self * Distances.metersInAMile
     }
     
-    class func milesIn(meters:Double) -> Double {
-        return meters * Distances.milesInAMeter
+    func toMiles() -> Double {
+        return self * Distances.milesInAMeter
     }
-    
 }

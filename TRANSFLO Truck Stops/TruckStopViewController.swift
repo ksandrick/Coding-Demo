@@ -42,7 +42,7 @@ class TruckStopViewController: UIViewController {
         }
         
         let meters = truckStop?.distance(location: userLocation) ?? 0
-        let miles = Utils.milesIn(meters: meters)
+        let miles = meters.toMiles()
         let distanceStringFormat = NSLocalizedString("%.1f miles from current location", comment:"" )
         let distance = String(format:distanceStringFormat,miles)
         distanceLabel.text = distance

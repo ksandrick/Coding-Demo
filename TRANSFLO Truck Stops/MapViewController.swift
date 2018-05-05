@@ -197,7 +197,7 @@ extension MapViewController: MKMapViewDelegate {
     
     func centerMapOnLocation(location: CLLocation,
                              radius:Double = Distances.defaultRadius) {
-        let radiusInMeters = Utils.metersIn(miles: radius)
+        let radiusInMeters = radius.toMeters()
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
                                                                   radiusInMeters, radiusInMeters)
         mapView.setRegion(coordinateRegion, animated: true)

@@ -22,6 +22,7 @@ extension MKMapView {
         let centerLocation = CLLocation(latitude: self.centerCoordinate.latitude, longitude: self.centerCoordinate.longitude)
         let topCenterCoordinate = self.topCenterCoordinate()
         let topCenterLocation = CLLocation(latitude: topCenterCoordinate.latitude, longitude: topCenterCoordinate.longitude)
-        return Utils.milesIn(meters: centerLocation.distance(from: topCenterLocation))
+        let distance = centerLocation.distance(from: topCenterLocation)
+        return distance.toMiles()
     }
 }
