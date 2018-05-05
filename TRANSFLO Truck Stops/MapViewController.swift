@@ -13,8 +13,33 @@ import MapKit
 class MapViewController: UIViewController {
 
     var locationManager: CLLocationManager!
-    @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var mapTypeControl: UISegmentedControl!
+    @IBOutlet weak var mapView: MKMapView! {
+        didSet {
+            mapView.delegate = self
+            mapView.mapType = mapType
+        }
+    }
+    
+    @IBOutlet weak var mapTypeControl: UISegmentedControl! {
+        didSet {
+            let typeVal: Int
+            switch mapType {
+                case .standard:
+                typeVal = 0
+            case .satellite:
+                typeVal = 1
+            default:
+                typeVal = 0
+            }
+            mapTypeControl.selectedSegmentIndex = typeVal
+        }
+    }
+    
+    @IBOutlet weak var mapTrackingButton: UIButton! {
+        didSet {
+            configureTrackingButtonFor(state: isTracking)
+        }
+    }
     
     var truckStops: [TruckStop] = [] {
         didSet {
@@ -22,12 +47,11 @@ class MapViewController: UIViewController {
         }
     }
 
-    let userDefaults = UserDefaults.standard
-    
     struct K {
         static let trackingKey = "Tracking"
         static let mapTypeKey = "MapType"
     }
+    let userDefaults = UserDefaults.standard
     
     var isTracking: Bool {
         get {
@@ -52,12 +76,8 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapView.delegate = self
         locationManager = CLLocationManager()
         locationManager.delegate = self
-        
-        mapView.mapType = mapType
-        mapTypeControl.selectedSegmentIndex = mapType        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -165,9 +185,13 @@ extension MapViewController: MKMapViewDelegate {
     
     @IBAction func toggleTracking(_ sender:UIButton) {
         isTracking = !isTracking
-        let buttonTitle = isTracking ? NSLocalizedString("Tracking: On", comment:"" ) : NSLocalizedString("Tracking: Off", comment:"" )
-        sender.setTitle(buttonTitle, for: .normal)
+        configureTrackingButtonFor(state: isTracking)
         if isTracking { locationManager.startUpdatingLocation() }
+    }
+    
+    func configureTrackingButtonFor(state: Bool) {
+        let buttonTitle = state ? NSLocalizedString("Tracking: On", comment:"" ) : NSLocalizedString("Tracking: Off", comment:"" )
+        mapTrackingButton.setTitle(buttonTitle, for: .normal)
     }
     
     @IBAction func resetMap() {
