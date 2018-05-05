@@ -86,21 +86,18 @@ extension MapViewController: CLLocationManagerDelegate {
 
     func determineLocationStatus() {
         if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
-                case .notDetermined:
-                    locationManager.requestWhenInUseAuthorization()
-                case .denied, .restricted:
-                    //Show alert sending them to settings
-                    showSettingsAlert()
-                case .authorizedAlways, .authorizedWhenInUse:
-                    startLocationManager()
-            }
+            handleAuthorization(status: CLLocationManager.authorizationStatus())
         } else {
             print("Location services are not enabled")
+            showSettingsAlert()
         }
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        handleAuthorization(status: status)
+    }
+    
+    func handleAuthorization(status: CLAuthorizationStatus) {
         switch status {
         case .notDetermined:
             manager.requestWhenInUseAuthorization()
