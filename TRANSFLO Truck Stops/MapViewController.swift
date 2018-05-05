@@ -120,7 +120,7 @@ extension MapViewController: CLLocationManagerDelegate {
     func handleAuthorization(status: CLAuthorizationStatus) {
         switch status {
         case .notDetermined:
-            manager.requestWhenInUseAuthorization()
+            locationManager.requestWhenInUseAuthorization()
         case .denied, .restricted:
             showSettingsAlert()
         case .authorizedAlways, .authorizedWhenInUse:
@@ -153,14 +153,9 @@ extension MapViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print("User location did change")
-        manager.stopUpdatingLocation()
-        let userLocation:CLLocation = locations[0] as CLLocation
-        print("user latitude = \(userLocation.coordinate.latitude)")
-        print("user longitude = \(userLocation.coordinate.longitude)")
-        
+        let userLocation:CLLocation = locations.last! as CLLocation
         centerMapOnLocation(location: userLocation)
-        
-        if !isTracking { locationManager.stopUpdatingLocation() }
+        if !isTracking { manager.stopUpdatingLocation() }
         
         TruckStop.retrieveTruckStops(location: userLocation) { truckStops in
             self.truckStops = truckStops
