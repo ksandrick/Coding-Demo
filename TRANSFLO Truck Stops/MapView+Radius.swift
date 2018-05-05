@@ -20,9 +20,9 @@ extension MKMapView {
     
     public func currentRadius() -> Double {
         let centerLocation = CLLocation(latitude: self.centerCoordinate.latitude, longitude: self.centerCoordinate.longitude)
-        let topCenterCoordinate = self.topCenterCoordinate()
-        let topCenterLocation = CLLocation(latitude: topCenterCoordinate.latitude, longitude: topCenterCoordinate.longitude)
-        let distance = centerLocation.distance(from: topCenterLocation)
+        let referenceCoordinate = self.topLeftCoordinate()
+        let referenceLocation = CLLocation(latitude: referenceCoordinate.latitude, longitude: referenceCoordinate.longitude)
+        let distance = centerLocation.distance(from: referenceLocation)
         return distance.toMiles()
     }
 }
