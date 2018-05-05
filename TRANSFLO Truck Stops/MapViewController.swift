@@ -11,9 +11,8 @@ import CoreLocation
 import MapKit
 
 class MapViewController: UIViewController {
-    
-    var isTracking:Bool = false
-    var locationManager:CLLocationManager!
+
+    var locationManager: CLLocationManager!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapTypeControl: UISegmentedControl!
     
@@ -22,22 +21,48 @@ class MapViewController: UIViewController {
             self.mapView.addAnnotations(truckStops)
         }
     }
+
+    let userDefaults = UserDefaults.standard
+    
+    struct K {
+        static let trackingKey = "Tracking"
+        static let mapTypeKey = "MapType"
+    }
+    
+    var isTracking: Bool {
+        get {
+            return userDefaults.bool(forKey: K.trackingKey)
+        }
+        set(newValue) {
+            userDefaults.set(newValue, forKey: K.trackingKey)
+        }
+    }
+    
+    var mapType: MKMapType {
+        get {
+            guard let savedMapType = userDefaults.value(forKey: K.mapTypeKey) as? UInt else {
+                return MKMapType.standard
+            }
+            return MKMapType(rawValue: savedMapType)!
+        }
+        set(newType) {
+            userDefaults.set(newType.rawValue, forKey: K.mapTypeKey)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         locationManager = CLLocationManager()
         locationManager.delegate = self
+        
+        mapView.mapType = mapType
+        mapTypeControl.selectedSegmentIndex = mapType        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         determineLocationStatus()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func unwindToMainViewController(sender: UIStoryboardSegue) {
@@ -132,12 +157,13 @@ extension MapViewController: MKMapViewDelegate {
     @IBAction func mapTypeChanged(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            mapView.mapType = .standard
+            mapType = .standard
         case 1:
-            mapView.mapType = .satellite
+            mapType = .satellite
         default:
-            mapView.mapType = .standard
+            mapType = .standard
         }
+        mapView.mapType = mapType
     }
     
     @IBAction func toggleTracking(_ sender:UIButton) {
