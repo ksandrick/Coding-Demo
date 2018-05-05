@@ -146,6 +146,7 @@ extension MapViewController: CLLocationManagerDelegate {
 
     func startLocationManager() {
         if CLLocationManager.locationServicesEnabled() {
+            locationManager.pausesLocationUpdatesAutomatically = true
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.startUpdatingLocation()
         }
@@ -213,6 +214,9 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         recolorSelectedPin(view: view, toColor: UIColor.green)
+        if let location = view.annotation?.coordinate {
+            mapView.setCenter(location, animated: true)
+        }
         performSegue(withIdentifier: "TruckStopSegue", sender: view)
     }
     
