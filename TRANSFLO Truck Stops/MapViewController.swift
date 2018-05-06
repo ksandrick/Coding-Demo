@@ -175,7 +175,9 @@ extension MapViewController: CLLocationManagerDelegate {
         }
         
         TruckStop.retrieveTruckStops(location: userLocation) { truckStops in
-            self.truckStops = truckStops
+            var accumulatedTruckStops = self.truckStops + truckStops
+            accumulatedTruckStops = Array(Set(accumulatedTruckStops))
+            self.truckStops = accumulatedTruckStops
         }
     }
  
@@ -236,7 +238,9 @@ extension MapViewController: MKMapViewDelegate {
         let currentMapLocation = mapView.centerCoordinate
         let location:CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
         TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { truckStops in
-            self.truckStops = truckStops
+            var accumulatedTruckStops = self.truckStops + truckStops
+            accumulatedTruckStops = Array(Set(accumulatedTruckStops))
+            self.truckStops = accumulatedTruckStops
         }
     }
     
