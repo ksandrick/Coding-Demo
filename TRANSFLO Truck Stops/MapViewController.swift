@@ -12,7 +12,9 @@ import MapKit
 
 class MapViewController: UIViewController {
 
+    private var resetWorkItem: DispatchWorkItem?
     var locationManager: CLLocationManager!
+    
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
             mapView.delegate = self
@@ -43,7 +45,8 @@ class MapViewController: UIViewController {
     
     var truckStops: [TruckStop] = [] {
         didSet {
-            self.mapView.addAnnotations(truckStops)
+//            mapView.removeAnnotations(mapView.annotations)
+            mapView.addAnnotations(truckStops)
         }
     }
 
@@ -51,6 +54,7 @@ class MapViewController: UIViewController {
         static let trackingKey = "Tracking"
         static let mapTypeKey = "MapType"
     }
+    
     let userDefaults = UserDefaults.standard
     
     var isTracking: Bool {
@@ -98,6 +102,14 @@ class MapViewController: UIViewController {
             modalViewController.truckStop = truckStop
             modalViewController.userLocation = mapView.userLocation.location
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        resetWorkItem?.cancel()
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        reCenterMapInSeconds(Timing.inactivityDelay)
     }
     
 }
@@ -148,6 +160,7 @@ extension MapViewController: CLLocationManagerDelegate {
         if CLLocationManager.locationServicesEnabled() {
             locationManager.pausesLocationUpdatesAutomatically = true
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.distanceFilter = Distances.defaultFilterDistance
             locationManager.startUpdatingLocation()
         }
     }
@@ -155,8 +168,11 @@ extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print("User location did change")
         let userLocation:CLLocation = locations.last! as CLLocation
-        centerMapOnLocation(location: userLocation)
-        if !isTracking { manager.stopUpdatingLocation() }
+        if isTracking {
+            reCenterMapInSeconds(Timing.defaultMinimumDelay)
+        } else {
+            manager.stopUpdatingLocation()
+        }
         
         TruckStop.retrieveTruckStops(location: userLocation) { truckStops in
             self.truckStops = truckStops
@@ -191,12 +207,24 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     @IBAction func resetMap() {
+        reCenterMapOnUser(withReset: true)
+    }
+    
+    func reCenterMapOnUser(withReset: Bool) {
+        let radius = withReset ? Distances.defaultRadius : mapView.currentRadius()
         if let currentUserLocation = mapView.userLocation.location {
-            centerMapOnLocation(location: currentUserLocation)
+            centerMapOnLocation(currentUserLocation, radius: radius)
         }
     }
     
-    func centerMapOnLocation(location: CLLocation,
+    func reCenterMapInSeconds(_ seconds: Double) {
+        resetWorkItem = DispatchWorkItem {[weak self] in
+            self?.reCenterMapOnUser(withReset: false)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: resetWorkItem!)
+    }
+    
+    func centerMapOnLocation(_ location: CLLocation,
                              radius:Double = Distances.defaultRadius) {
         let radiusInMeters = radius.toMeters()
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,

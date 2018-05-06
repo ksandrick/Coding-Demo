@@ -13,10 +13,18 @@ struct Services {
     static let apiKey = "amNhdGFsYW5AdHJhbnNmbG8uY29tOnJMVGR6WmdVTVBYbytNaUp6RlIxTStjNmI1VUI4MnFYcEVKQzlhVnFWOEF5bUhaQzdIcjVZc3lUMitPTS9paU8="
 }
 
+struct Timing {
+    static let defaultMinimumDelay: Double = 0.5
+    static let inactivityDelay: Double = 5.0
+    static let detailInactivityDelay: Double = 15.0
+    static let searchInactivityDelay: Double = 30.0
+}
+
 struct Distances {
     static let metersInAMile: Double = 1609.344
     static let milesInAMeter: Double = 0.000621371192
     static let defaultRadius: Double = 100.0
+    static let defaultFilterDistance: Double = 100.0
 }
 
 extension Double {
