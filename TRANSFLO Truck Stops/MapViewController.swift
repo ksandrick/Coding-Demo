@@ -43,12 +43,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    var truckStops: [TruckStop] = [] {
-        didSet {
-//            mapView.removeAnnotations(mapView.annotations)
-            mapView.addAnnotations(truckStops)
-        }
-    }
+    var truckStops: [TruckStop] = []
 
     struct K {
         static let trackingKey = "Tracking"
@@ -57,6 +52,7 @@ class MapViewController: UIViewController {
     
     let userDefaults = UserDefaults.standard
     
+    var isFirstTime: Bool = true
     var isTracking: Bool {
         get {
             return userDefaults.bool(forKey: K.trackingKey)
@@ -160,16 +156,17 @@ extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print("User location did change")
         let userLocation:CLLocation = locations.last! as CLLocation
+
+        if isFirstTime {
+            isFirstTime = false
+            reCenterMapOnLocation(userLocation, withReset: true)
+            manager.stopUpdatingLocation()
+        }
+
         if isTracking {
             reCenterMapInSeconds(Timing.defaultMinimumDelay)
         } else {
             manager.stopUpdatingLocation()
-        }
-        
-        TruckStop.retrieveTruckStops(location: userLocation) { truckStops in
-            var accumulatedTruckStops = self.truckStops + truckStops
-            accumulatedTruckStops = Array(Set(accumulatedTruckStops))
-            self.truckStops = accumulatedTruckStops
         }
     }
  
@@ -201,19 +198,25 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     @IBAction func resetMap() {
-        reCenterMapOnUser(withReset: true)
+        if let currentUserLocation = mapView.userLocation.location {
+            reCenterMapOnLocation(currentUserLocation, withReset: true)
+        }
     }
     
-    func reCenterMapOnUser(withReset: Bool) {
-        let radius = withReset ? Distances.defaultRadius : mapView.currentRadius()
+    func reCenterMapOnUser() {
         if let currentUserLocation = mapView.userLocation.location {
-            centerMapOnLocation(currentUserLocation, radius: radius)
+            reCenterMapOnLocation(currentUserLocation, withReset: false)
         }
+    }
+    
+    func reCenterMapOnLocation(_ location: CLLocation, withReset: Bool) {
+        let radius = withReset ? Distances.defaultRadius : mapView.currentRadius()
+            centerMapOnLocation(location, radius: radius)
     }
     
     func reCenterMapInSeconds(_ seconds: Double) {
         resetWorkItem = DispatchWorkItem {[weak self] in
-            self?.reCenterMapOnUser(withReset: false)
+            self?.reCenterMapOnUser()
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: resetWorkItem!)
     }
@@ -226,14 +229,24 @@ extension MapViewController: MKMapViewDelegate {
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        resetWorkItem?.cancel()
+    }
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let currentMapLocation = mapView.centerCoordinate
         let location:CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
+
         TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { truckStops in
+            let newTruckStops = truckStops.newest(from: self.truckStops)
+            self.mapView.addAnnotations(newTruckStops)
+
             var accumulatedTruckStops = self.truckStops + truckStops
             accumulatedTruckStops = Array(Set(accumulatedTruckStops))
             self.truckStops = accumulatedTruckStops
         }
+
+        if isTracking { reCenterMapInSeconds(Timing.inactivityDelay) }
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -242,6 +255,11 @@ extension MapViewController: MKMapViewDelegate {
             mapView.setCenter(location, animated: true)
         }
         performSegue(withIdentifier: "TruckStopSegue", sender: view)
+        
+        if isTracking {
+            resetWorkItem?.cancel()
+            reCenterMapInSeconds(Timing.detailInactivityDelay)
+        }
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
