@@ -36,3 +36,11 @@ extension Double {
         return self * Distances.milesInAMeter
     }
 }
+
+extension Array where Element: Hashable {
+    func newest(from other: [Element]) -> [Element] {
+        let thisSet = Set(self)
+        let otherSet = Set(other)
+        return Array(thisSet.subtracting(otherSet))
+    }
+}
