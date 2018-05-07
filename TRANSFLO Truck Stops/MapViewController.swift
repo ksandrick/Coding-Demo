@@ -280,16 +280,15 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let identifier = "truckStopMarker"
-        
         if annotation is MKUserLocation {
-            let locationView = mapView.view(for: annotation) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            let locationView = mapView.view(for: annotation) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "userLocation")
             locationView.markerTintColor = UIColor.blue
             locationView.glyphImage = UIImage.init(named: "truck")
             return locationView
         }
         
         guard let curAnnotation = annotation as? TruckStop else { return nil }
+        let identifier = "truckStopMarker"
         var pinView: MKMarkerAnnotationView
         if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as?  MKMarkerAnnotationView {
             dequeuedView.annotation = curAnnotation
