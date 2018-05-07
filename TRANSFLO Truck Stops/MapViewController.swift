@@ -104,14 +104,6 @@ class MapViewController: UIViewController {
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        resetWorkItem?.cancel()
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        reCenterMapInSeconds(Timing.inactivityDelay)
-    }
-    
 }
 
 extension MapViewController: CLLocationManagerDelegate {
