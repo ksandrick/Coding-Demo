@@ -27,7 +27,7 @@ class TruckStopViewController: UIViewController {
     @IBOutlet weak var phoneView: UIStackView!
     @IBOutlet weak var phoneLabel: UILabel!
     
-    public var userLocation : CLLocation?
+    public var userLocation: CLLocation?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,8 +43,8 @@ class TruckStopViewController: UIViewController {
         
         let meters = truckStop?.distance(location: userLocation) ?? 0
         let miles = meters.toMiles()
-        let distanceStringFormat = NSLocalizedString("%.1f miles from current location", comment:"" )
-        let distance = String(format:distanceStringFormat,miles)
+        let distanceStringFormat = NSLocalizedString("%.1f miles from current location", comment: "" )
+        let distance = String(format: distanceStringFormat, miles)
         distanceLabel.text = distance
         
         if let address = truckStop?.rawLine1 {

@@ -129,14 +129,14 @@ extension MapViewController: CLLocationManagerDelegate {
     }
  
     func showSettingsAlert() {
-        let alertController = UIAlertController(title: NSLocalizedString("Location Services Required", comment:"" ), message: NSLocalizedString("Open user settings", comment:"" ), preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: NSLocalizedString("Location Services Required", comment: "" ), message: NSLocalizedString("Open user settings", comment: "" ), preferredStyle: UIAlertControllerStyle.alert)
 
         let okAction = UIAlertAction(title: "Settings", style: .default) {
-            (result : UIAlertAction) -> Void in
-            UIApplication.shared.open(NSURL(string:UIApplicationOpenSettingsURLString)! as URL, options: [:], completionHandler: nil)
+            (result: UIAlertAction) -> Void in
+            UIApplication.shared.open(NSURL(string: UIApplicationOpenSettingsURLString)! as URL, options: [:], completionHandler: nil)
         }
 
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment:"" ), style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "" ), style: .cancel, handler: nil)
         
         alertController.addAction(okAction)
         alertController.addAction(cancelAction)
@@ -155,7 +155,7 @@ extension MapViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print("User location did change")
-        let userLocation:CLLocation = locations.last! as CLLocation
+        let userLocation: CLLocation = locations.last! as CLLocation
 
         if isFirstTime {
             isFirstTime = false
@@ -186,14 +186,14 @@ extension MapViewController: MKMapViewDelegate {
         mapView.mapType = mapType
     }
     
-    @IBAction func toggleTracking(_ sender:UIButton) {
+    @IBAction func toggleTracking(_ sender: UIButton) {
         isTracking = !isTracking
         configureTrackingButtonFor(state: isTracking)
         if isTracking { locationManager.startUpdatingLocation() }
     }
     
     func configureTrackingButtonFor(state: Bool) {
-        let buttonTitle = state ? NSLocalizedString("Tracking: On", comment:"" ) : NSLocalizedString("Tracking: Off", comment:"" )
+        let buttonTitle = state ? NSLocalizedString("Tracking: On", comment: "" ) : NSLocalizedString("Tracking: Off", comment: "" )
         mapTrackingButton.setTitle(buttonTitle, for: .normal)
     }
     
@@ -222,7 +222,7 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func centerMapOnLocation(_ location: CLLocation,
-                             radius:Double = Distances.defaultRadius) {
+                             radius: Double = Distances.defaultRadius) {
         let radiusInMeters = radius.toMeters()
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
                                                                   radiusInMeters, radiusInMeters)
@@ -235,7 +235,7 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let currentMapLocation = mapView.centerCoordinate
-        let location:CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
+        let location: CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
 
         TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { truckStops in
             let newTruckStops = truckStops.newest(from: self.truckStops)
