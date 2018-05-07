@@ -24,7 +24,7 @@ struct Distances {
     static let metersInAMile: Double = 1609.344
     static let milesInAMeter: Double = 0.000621371192
     static let defaultRadius: Double = 100.0
-    static let defaultFilterDistance: Double = 100.0
+    static let defaultFilterDistance: Double = 500.0
 }
 
 extension Double {

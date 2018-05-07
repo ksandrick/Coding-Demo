@@ -147,7 +147,7 @@ extension MapViewController: CLLocationManagerDelegate {
     func startLocationManager() {
         if CLLocationManager.locationServicesEnabled() {
             locationManager.pausesLocationUpdatesAutomatically = true
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.distanceFilter = Distances.defaultFilterDistance
             locationManager.startUpdatingLocation()
         }
@@ -159,14 +159,14 @@ extension MapViewController: CLLocationManagerDelegate {
 
         if isFirstTime {
             isFirstTime = false
+            manager.stopUpdatingLocation()
             reCenterMapOnLocation(userLocation, withReset: true)
-            manager.stopUpdatingLocation()
-        }
-
-        if isTracking {
-            reCenterMapInSeconds(Timing.defaultMinimumDelay)
         } else {
-            manager.stopUpdatingLocation()
+            if isTracking {
+                reCenterMapInSeconds(Timing.defaultMinimumDelay)
+            } else {
+                manager.stopUpdatingLocation()
+            }
         }
     }
  
@@ -239,7 +239,9 @@ extension MapViewController: MKMapViewDelegate {
 
         TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { truckStops in
             let newTruckStops = truckStops.newest(from: self.truckStops)
-            self.mapView.addAnnotations(newTruckStops)
+            DispatchQueue.main.async {
+                self.mapView.addAnnotations(newTruckStops)
+            }
 
             var accumulatedTruckStops = self.truckStops + truckStops
             accumulatedTruckStops = Array(Set(accumulatedTruckStops))
