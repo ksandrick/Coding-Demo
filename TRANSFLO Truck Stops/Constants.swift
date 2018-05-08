@@ -14,9 +14,13 @@ struct Services {
 }
 
 struct Timing {
+    // Standard delay, to prevent sudden changes
     static let defaultMinimumDelay: Double = 0.5
+    // Delay after map UI inactivity
     static let inactivityDelay: Double = 5.0
+    // Delay after truck stop detail use inactivity
     static let detailInactivityDelay: Double = 15.0
+    // Delay after search results inactivity
     static let searchInactivityDelay: Double = 30.0
 }
 
