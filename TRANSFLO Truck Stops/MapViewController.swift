@@ -88,6 +88,8 @@ class MapViewController: UIViewController {
     @IBAction func unwindToMainViewController(sender: UIStoryboardSegue) {
         if let currentTruckStop = (sender.source as? TruckStopViewController)?.truckStop {
             mapView.deselectAnnotation(currentTruckStop, animated: false)
+        }else if let address = (sender.source as? SearchViewController)?.address {
+            //search with address
         }
     }
     
