@@ -46,8 +46,11 @@ class MapViewController: UIViewController {
     var truckStops: [TruckStop] = []
 
     struct K {
-        static let trackingKey = "Tracking"
-        static let mapTypeKey = "MapType"
+        static let trackingKey = "tracking"
+        static let mapTypeKey = "mapType"
+        static let truckStopSegue = "truckStopSegue"
+        static let userLocationMarker = "userLocationMarker"
+        static let truckStopMarker = "truckStopMarker"
     }
     
     let userDefaults = UserDefaults.standard
@@ -259,7 +262,7 @@ extension MapViewController: MKMapViewDelegate {
         if let location = view.annotation?.coordinate {
             mapView.setCenter(location, animated: true)
         }
-        performSegue(withIdentifier: "TruckStopSegue", sender: view)
+        performSegue(withIdentifier: K.truckStopSegue, sender: view)
         
         if isTracking {
             resetWorkItem?.cancel()
@@ -286,14 +289,14 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation {
-            let locationView = mapView.view(for: annotation) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "userLocation")
+            let locationView = mapView.view(for: annotation) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: K.userLocationMarker)
             locationView.markerTintColor = UIColor.blue
             locationView.glyphImage = UIImage.init(named: "truck")
             return locationView
         }
         
         guard let curAnnotation = annotation as? TruckStop else { return nil }
-        let identifier = "truckStopMarker"
+        let identifier = K.truckStopMarker
         var pinView: MKMarkerAnnotationView
         if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as?  MKMarkerAnnotationView {
             dequeuedView.annotation = curAnnotation
