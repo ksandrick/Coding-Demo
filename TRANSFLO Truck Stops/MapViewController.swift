@@ -159,15 +159,9 @@ extension MapViewController: CLLocationManagerDelegate {
 
         if isFirstTime {
             isFirstTime = false
-            manager.stopUpdatingLocation()
             reCenterMapOnLocation(userLocation, withReset: true)
-        } else {
-            if isTracking {
-                reCenterMapInSeconds(Timing.defaultMinimumDelay)
-            } else {
-                manager.stopUpdatingLocation()
-            }
         }
+        if !isTracking { manager.stopUpdatingLocation() }
     }
  
 }
@@ -205,7 +199,7 @@ extension MapViewController: MKMapViewDelegate {
     
     func reCenterMapOnUser() {
         if let currentUserLocation = mapView.userLocation.location {
-            reCenterMapOnLocation(currentUserLocation, withReset: false)
+            mapView.setCenter(currentUserLocation.coordinate, animated: true)
         }
     }
     
@@ -248,7 +242,8 @@ extension MapViewController: MKMapViewDelegate {
             self.truckStops = accumulatedTruckStops
         }
 
-        if isTracking { reCenterMapInSeconds(Timing.inactivityDelay) }
+        let detailsPresent = self.presentedViewController is TruckStopViewController
+        if isTracking && !detailsPresent { reCenterMapInSeconds(Timing.inactivityDelay) }
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
