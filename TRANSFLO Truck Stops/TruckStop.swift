@@ -100,5 +100,21 @@ class TruckStop: NSObject, MKAnnotation {
         }
         task.resume()
     }
+    
+    // Ensure we conform to hashable protocol so Set operations and comparisons will work
+    
+    // Generate unique hashValue based on truck stop's lat/long
+    override var hashValue: Int {
+        return latitude.hashValue ^ longitude.hashValue
+    }
+
+    // Conform to Equatable to test for uniqueness in Set operations
+    override func isEqual(_ object: Any?) -> Bool {
+        if let rhs = object as? TruckStop {
+            return latitude == rhs.latitude && longitude == rhs.longitude
+        } else {
+            return false
+        }
+    }
  
 }
