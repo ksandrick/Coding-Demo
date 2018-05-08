@@ -231,13 +231,13 @@ extension MapViewController: MKMapViewDelegate {
         let currentMapLocation = mapView.centerCoordinate
         let location: CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
 
-        TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { truckStops in
-            let newTruckStops = truckStops.newest(from: self.truckStops)
+        TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { resultTruckStops in
+            let newTruckStops = resultTruckStops.newest(from: self.truckStops)
             DispatchQueue.main.async {
                 self.mapView.addAnnotations(newTruckStops)
             }
 
-            var accumulatedTruckStops = self.truckStops + truckStops
+            var accumulatedTruckStops = self.truckStops + newTruckStops
             accumulatedTruckStops = Array(Set(accumulatedTruckStops))
             self.truckStops = accumulatedTruckStops
         }
