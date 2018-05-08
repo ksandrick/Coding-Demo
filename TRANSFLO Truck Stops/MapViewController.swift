@@ -185,7 +185,10 @@ extension MapViewController: MKMapViewDelegate {
     @IBAction func toggleTracking(_ sender: UIButton) {
         isTracking = !isTracking
         configureTrackingButtonFor(state: isTracking)
-        if isTracking { locationManager.startUpdatingLocation() }
+        if isTracking {
+            locationManager.startUpdatingLocation()
+            reCenterMapInSeconds(Timing.defaultMinimumDelay)
+        }
     }
     
     func configureTrackingButtonFor(state: Bool) {
