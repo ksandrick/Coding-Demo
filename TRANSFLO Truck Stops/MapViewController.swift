@@ -230,21 +230,24 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        let currentMapLocation = mapView.centerCoordinate
-        let location: CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
+        let detailsPresent = self.presentedViewController is TruckStopViewController
 
-        TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { resultTruckStops in
-            let newTruckStops = resultTruckStops.newest(from: self.truckStops)
-            DispatchQueue.main.async {
-                self.mapView.addAnnotations(newTruckStops)
+        if !detailsPresent {
+            let currentMapLocation = mapView.centerCoordinate
+            let location: CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
+
+            TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { resultTruckStops in
+                let newTruckStops = resultTruckStops.newest(from: self.truckStops)
+                DispatchQueue.main.async {
+                    self.mapView.addAnnotations(newTruckStops)
+                }
+
+                var accumulatedTruckStops = self.truckStops + newTruckStops
+                accumulatedTruckStops = Array(Set(accumulatedTruckStops))
+                self.truckStops = accumulatedTruckStops
             }
-
-            var accumulatedTruckStops = self.truckStops + newTruckStops
-            accumulatedTruckStops = Array(Set(accumulatedTruckStops))
-            self.truckStops = accumulatedTruckStops
         }
 
-        let detailsPresent = self.presentedViewController is TruckStopViewController
         if isTracking && !detailsPresent { reCenterMapInSeconds(Timing.inactivityDelay) }
     }
     
