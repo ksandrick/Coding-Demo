@@ -11,11 +11,11 @@ import CoreLocation
 import MapKit
 
 class TruckStop: NSObject, MKAnnotation {
-    let name: String
-    let city: String
-    let state: String
+    @objc let name: String
+    @objc let city: String
+    @objc let state: String
     let country: String
-    let zip: String
+    @objc let zip: String
     let rawLine1: String
     let rawLine2: String
     let rawLine3: String
@@ -23,6 +23,9 @@ class TruckStop: NSObject, MKAnnotation {
     let longitude: Double
     let coordinate: CLLocationCoordinate2D
     
+    var searchResult: Bool = false
+    
+    // Required for conformance to MKAnnotation
     var title: String? {
         return name
     }
@@ -101,9 +104,7 @@ class TruckStop: NSObject, MKAnnotation {
         task.resume()
     }
     
-    // Ensure we conform to hashable protocol so Set operations and comparisons will work
-    
-    // Generate unique hashValue based on truck stop's lat/long
+    // Generate unique hashValue based on truck stop's lat/long to conform to Hashable protocol
     override var hashValue: Int {
         return latitude.hashValue ^ longitude.hashValue
     }
