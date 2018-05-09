@@ -114,7 +114,7 @@ class MapViewController: UIViewController {
         if let modalViewController = segue.destination as? TruckStopViewController {
             modalViewController.truckStop = truckStop
             modalViewController.userLocation = mapView.userLocation.location
-        } else if let searchViewController = segue.destination as? SearchViewController {
+        } else if segue.destination is SearchViewController {
             mapView.removeAnnotations(truckStops)
             truckStops = truckStops.map { t in
                 t.searchResult = false
