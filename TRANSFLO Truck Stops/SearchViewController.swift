@@ -22,6 +22,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var searchButton: UIButton!
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
         performSegue(withIdentifier: "unwindToMain", sender: self)
         return true
     }
@@ -44,7 +45,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate {
             let zipPredicate = NSPredicate(format: "zip = %@", zip)
             predicateArray.append(zipPredicate)
         }
-        return NSCompoundPredicate(type: .and, subpredicates: predicateArray)
+        if !predicateArray.isEmpty {
+            return NSCompoundPredicate(type: .and, subpredicates: predicateArray)
+        }
+        return nil
     }
 
 }
