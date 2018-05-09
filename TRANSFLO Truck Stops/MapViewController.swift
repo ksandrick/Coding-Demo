@@ -91,8 +91,15 @@ class MapViewController: UIViewController {
     @IBAction func unwindToMainViewController(sender: UIStoryboardSegue) {
         if let currentTruckStop = (sender.source as? TruckStopViewController)?.truckStop {
             mapView.deselectAnnotation(currentTruckStop, animated: false)
-        }else if let address = (sender.source as? SearchViewController)?.address {
-            //search with address
+        }else if let searchPredicate = (sender.source as? SearchViewController)?.searchPredicate {
+            let filteredTruckStops: [TruckStop] = (self.truckStops as NSArray).filtered(using: searchPredicate) as! [TruckStop]
+            
+            self.mapView.removeAnnotations(filteredTruckStops)
+            let searchResults: [TruckStop] = filteredTruckStops.map { t in
+                t.searchResult = true
+                return t
+            }
+            self.mapView.addAnnotations(searchResults)
         }
     }
     
@@ -307,6 +314,7 @@ extension MapViewController: MKMapViewDelegate {
             pinView.markerTintColor = UIColor.orange
             pinView.glyphImage = UIImage.init(named: "gasPump")
         }
+        pinView.markerTintColor = curAnnotation.searchResult ? UIColor.red : UIColor.orange
         return pinView
     }
 }
