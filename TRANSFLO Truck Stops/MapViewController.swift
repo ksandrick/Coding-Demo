@@ -114,6 +114,13 @@ class MapViewController: UIViewController {
         if let modalViewController = segue.destination as? TruckStopViewController {
             modalViewController.truckStop = truckStop
             modalViewController.userLocation = mapView.userLocation.location
+        } else if let searchViewController = segue.destination as? SearchViewController {
+            mapView.removeAnnotations(truckStops)
+            truckStops = truckStops.map { t in
+                t.searchResult = false
+                return t
+            }
+            mapView.addAnnotations(truckStops)
         }
     }
     
@@ -284,7 +291,9 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        recolorSelectedPin(view: view, toColor: UIColor.orange)
+        if let curAnnotation = view.annotation as? TruckStop {
+            recolorSelectedPin(view: view, toColor: curAnnotation.searchResult ? UIColor.red : UIColor.orange)
+        }
     }
     
     func recolorSelectedPin(view: MKAnnotationView, toColor: UIColor) {
