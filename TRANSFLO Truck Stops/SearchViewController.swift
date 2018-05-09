@@ -10,7 +10,11 @@ import UIKit
 
 class SearchViewController: UIViewController, UITextFieldDelegate {
     
-    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var nameTextField: UITextField! {
+        didSet {
+            nameTextField.becomeFirstResponder()
+        }
+    }
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var stateTextField: UITextField!
