@@ -16,26 +16,26 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var stateTextField: UITextField!
     @IBOutlet weak var zipTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
-
-    public var address: String {
-        get {
-            let name = makeAddressComponent(nameTextField)
-            let address = makeAddressComponent(addressTextField)
-            let city = makeAddressComponent(cityTextField)
-            let state = makeAddressComponent(stateTextField)
-            let zip = makeAddressComponent(zipTextField)
-            
-            let tempAddress = name + address + city + state + zip
-            return tempAddress
-        }
-    }
     
-    func makeAddressComponent(_ textField: UITextField) -> String {
-        if var text = textField.text {
-            text.append(",")
-            return text
+    public var searchPredicate: NSPredicate? {
+        var predicateArray = [NSPredicate]()
+        if let name = nameTextField.text, !name.isEmpty {
+            let namePredicate = NSPredicate(format: "name CONTAINS[cd] %@", name)
+            predicateArray.append(namePredicate)
         }
-        return ""
+        if let city = cityTextField.text, !city.isEmpty {
+            let cityPredicate = NSPredicate(format: "city MATCHES[cd] %@", city)
+            predicateArray.append(cityPredicate)
+        }
+        if let state = stateTextField.text, !state.isEmpty {
+            let statePredicate = NSPredicate(format: "state MATCHES[cd] %@", state)
+            predicateArray.append(statePredicate)
+        }
+        if let zip = zipTextField.text, !zip.isEmpty {
+            let zipPredicate = NSPredicate(format: "zip = %@", zip)
+            predicateArray.append(zipPredicate)
+        }
+        return NSCompoundPredicate(type: .and, subpredicates: predicateArray)
     }
 
 }
