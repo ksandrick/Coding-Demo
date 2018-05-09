@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var addressTextField: UITextField!
@@ -16,6 +16,11 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var stateTextField: UITextField!
     @IBOutlet weak var zipTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        performSegue(withIdentifier: "unwindToMain", sender: self)
+        return true
+    }
     
     public var searchPredicate: NSPredicate? {
         var predicateArray = [NSPredicate]()
