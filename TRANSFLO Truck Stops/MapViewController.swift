@@ -262,15 +262,24 @@ extension MapViewController: MKMapViewDelegate {
             let currentMapLocation = mapView.centerCoordinate
             let location: CLLocation = CLLocation(latitude: currentMapLocation.latitude, longitude: currentMapLocation.longitude)
 
-            TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { resultTruckStops in
-                let newTruckStops = resultTruckStops.newest(from: self.truckStops)
-                DispatchQueue.main.async {
-                    self.mapView.addAnnotations(newTruckStops)
+            TruckStop.retrieveTruckStops(radius: mapView.currentRadius(), location: location) { (status, resultTruckStops) in
+                switch status {
+                case .failure :
+                    let alertController = UIAlertController(title: NSLocalizedString("Network Failure", comment: "" ), message: NSLocalizedString("This app requires access to the internet to provide full functionality to you. Please check your settings.", comment: "" ), preferredStyle: UIAlertControllerStyle.alert)
+                    DispatchQueue.main.async {
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    self.isTracking = false
+                    self.locationManager.stopUpdatingLocation()
+                case .success:
+                    let newTruckStops = resultTruckStops.newest(from: self.truckStops)
+                    DispatchQueue.main.async {
+                        self.mapView.addAnnotations(newTruckStops)
+                    }
+                    var accumulatedTruckStops = self.truckStops + newTruckStops
+                    accumulatedTruckStops = Array(Set(accumulatedTruckStops))
+                    self.truckStops = accumulatedTruckStops
                 }
-
-                var accumulatedTruckStops = self.truckStops + newTruckStops
-                accumulatedTruckStops = Array(Set(accumulatedTruckStops))
-                self.truckStops = accumulatedTruckStops
             }
         }
 

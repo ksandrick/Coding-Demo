@@ -10,6 +10,11 @@ import Foundation
 import CoreLocation
 import MapKit
 
+enum ResultStatus : Error {
+    case success
+    case failure
+}
+
 class TruckStop: NSObject, MKAnnotation {
     @objc let name: String
     @objc let city: String
@@ -64,7 +69,7 @@ class TruckStop: NSObject, MKAnnotation {
     
     static func retrieveTruckStops(radius: Double = 100.0,
                             location: CLLocation,
-                            completion: @escaping ([TruckStop]) -> Void) {
+                            completion: @escaping (_ status: ResultStatus, _ results: [TruckStop]) -> Void) {
         let urlString = Services.apiURL + String(format:"%.2f", radius)
         print(urlString)
         let url = URL(string: urlString)!
@@ -80,6 +85,7 @@ class TruckStop: NSObject, MKAnnotation {
             guard let data = data, error == nil else {
                 // check for general errors
                 print("error=\(String(describing: error))")
+                completion(.failure, [])
                 return
             }
             
@@ -87,6 +93,7 @@ class TruckStop: NSObject, MKAnnotation {
                 // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
                 print("response = \(String(describing: response))")
+                completion(.failure, [])
             }
             
             var truckStops: [TruckStop] = []
@@ -97,7 +104,7 @@ class TruckStop: NSObject, MKAnnotation {
                             truckStops.append(truckStop)
                         }
                     }
-                    completion(truckStops)
+                    completion(.success, truckStops)
                 }
             }
         }
