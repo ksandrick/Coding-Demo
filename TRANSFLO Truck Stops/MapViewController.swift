@@ -49,6 +49,7 @@ class MapViewController: UIViewController {
         static let trackingKey = "tracking"
         static let mapTypeKey = "mapType"
         static let truckStopSegue = "truckStopSegue"
+        static let searchViewSegue = "searchViewSegue"
         static let userLocationMarker = "userLocationMarker"
         static let truckStopMarker = "truckStopMarker"
     }
@@ -56,6 +57,7 @@ class MapViewController: UIViewController {
     let userDefaults = UserDefaults.standard
     
     var isFirstTime: Bool = true
+    var isDisplayingSearch: Bool = false
     var isTracking: Bool {
         get {
             return userDefaults.bool(forKey: K.trackingKey)
@@ -94,12 +96,15 @@ class MapViewController: UIViewController {
         }else if let searchPredicate = (sender.source as? SearchViewController)?.searchPredicate {
             let filteredTruckStops: [TruckStop] = (self.truckStops as NSArray).filtered(using: searchPredicate) as! [TruckStop]
             
-            self.mapView.removeAnnotations(filteredTruckStops)
+            mapView.removeAnnotations(filteredTruckStops)
             let searchResults: [TruckStop] = filteredTruckStops.map { t in
                 t.searchResult = true
                 return t
             }
-            self.mapView.addAnnotations(searchResults)
+            mapView.addAnnotations(searchResults)
+            isDisplayingSearch = true
+            mapView.showAnnotations(searchResults, animated: true)
+            if isTracking { reCenterMapInSeconds(Timing.searchInactivityDelay) }
         }
     }
     
@@ -224,6 +229,7 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func reCenterMapInSeconds(_ seconds: Double) {
+        isDisplayingSearch = false
         resetWorkItem = DispatchWorkItem {[weak self] in
             self?.reCenterMapOnUser()
         }
@@ -261,7 +267,7 @@ extension MapViewController: MKMapViewDelegate {
             }
         }
 
-        if isTracking && !detailsPresent { reCenterMapInSeconds(Timing.inactivityDelay) }
+        if isTracking && !detailsPresent && !isDisplayingSearch { reCenterMapInSeconds(Timing.inactivityDelay) }
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -311,9 +317,10 @@ extension MapViewController: MKMapViewDelegate {
         } else {
             pinView = MKMarkerAnnotationView(annotation: curAnnotation, reuseIdentifier: identifier)
             pinView.canShowCallout = false
-            pinView.markerTintColor = UIColor.orange
-            pinView.glyphImage = UIImage.init(named: "gasPump")
+//            pinView.markerTintColor = UIColor.orange
+//            pinView.glyphImage = UIImage.init(named: "gasPump")
         }
+        pinView.glyphImage = curAnnotation.searchResult ? UIImage.init(named: "magnifier") : UIImage.init(named: "gasPump")
         pinView.markerTintColor = curAnnotation.searchResult ? UIColor.red : UIColor.orange
         return pinView
     }
